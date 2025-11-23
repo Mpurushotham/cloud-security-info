@@ -1,0 +1,80 @@
+
+## Setup and Deployment
+
+### Local Development
+
+1. Clone or download this repository
+2. Open `index.html` in a web browser
+3. All resources are self-contained and will work offline
+
+### GitHub Pages Deployment
+
+1. Upload all files to a GitHub repository
+2. Enable GitHub Pages in repository settings
+3. Set source to "Deploy from a branch" and select main/master branch
+4. The application will be available at `https://[username].github.io/[repository-name]`
+
+### Custom Deployment
+
+The application is static and can be deployed to any web hosting service:
+- Netlify
+- Vercel
+- AWS S3 + CloudFront
+- Azure Static Web Apps
+- Google Cloud Storage
+
+## Usage
+
+1. **Overview Tab**: Start here for a high-level view of all available modules
+2. **Cloud Security Tutorial**: Learn about security services across GCP, AWS, and Azure
+3. **E-Commerce Security**: Explore PCI DSS compliant architecture patterns
+4. **AppSec & DevSecOps**: Implement secure development practices
+5. **Financial Services**: Security patterns for banking and finance
+6. **Defense-in-Depth**: Layered security implementation strategy
+
+Each module includes:
+- Interactive diagrams and visualizations
+- Real-world use cases
+- Implementation guidance
+- Cross-cloud service comparisons
+
+## Browser Compatibility
+
+- Chrome/Chromium (recommended)
+- Firefox
+- Safari
+- Edge
+
+## Technologies Used
+
+- HTML5, CSS3, JavaScript
+- Font Awesome Icons
+- Google Fonts (Inter)
+- Mermaid.js for diagrams
+- Responsive CSS Grid and Flexbox
+
+## Contributing
+
+This is an educational resource. Feel free to:
+- Report issues or suggestions
+- Submit improvements via pull requests
+- Share with your team or community
+
+## License
+
+This content is provided for educational purposes. Please ensure proper attribution when sharing or modifying.
+
+## Security Note
+
+While this resource provides security guidance and patterns, always:
+- Follow your organization's security policies
+- Conduct proper security assessments
+- Implement controls based on your specific risk profile
+- Stay updated with the latest security advisories
+
+## Related Resources
+
+- [OWASP Foundation](https://owasp.org/)
+- [Cloud Security Alliance](https://cloudsecurityalliance.org/)
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks/)

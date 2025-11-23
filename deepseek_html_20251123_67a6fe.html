@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise E-Commerce Security Architecture</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --gcp-color: #4285F4;
+            --aws-color: #FF9900;
+            --azure-color: #0078D4;
+            --security-color: #e74c3c;
+            --compliance-color: #2ecc71;
+            --data-color: #9b59b6;
+            --app-color: #f39c12;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #34495e;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+        
+        .header-title {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 1000px;
+            margin-bottom: 1rem;
+        }
+        
+        .architecture-overview {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .architecture-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .main-architecture {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .compliance-status {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .architecture-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .architecture-container {
+            height: 700px;
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            overflow: hidden;
+        }
+        
+        .cloud-layer {
+            position: absolute;
+            width: 90%;
+            left: 5%;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+        
+        .security-layer {
+            background: linear-gradient(135deg, var(--security-color), #c0392b);
+            top: 30px;
+        }
+        
+        .application-layer {
+            background: linear-gradient(135deg, var(--app-color), #e67e22);
+            top: 180px;
+        }
+        
+        .data-layer {
+            background: linear-gradient(135deg, var(--data-color), #8e44ad);
+            top: 330px;
+        }
+        
+        .infrastructure-layer {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            top: 480px;
+        }
+        
+        .layer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .component {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        
+        .component:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+        
+        .component-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .compliance-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .compliance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .compliance-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .pci-compliant {
+            color: var(--compliance-color);
+        }
+        
+        .gdpr-compliant {
+            color: var(--data-color);
+        }
+        
+        .owasp-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .owasp-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+        
+        .owasp-risk {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid var(--security-color);
+            transition: var(--transition);
+        }
+        
+        .owasp-risk:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .risk-id {
+            background: var(--security-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .risk-title {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .risk-mitigation {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .tools-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+        
+        .tool-category {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            transition: var(--transition);
+        }
+        
+        .tool-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .tool-list {
+            list-style: none;
+        }
+        
+        .tool-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tool-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tool-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .gcp-badge {
+            background: var(--gcp-color);
+            color: white;
+        }
+        
+        .aws-badge {
+            background: var(--aws-color);
+            color: white;
+        }
+        
+        .azure-badge {
+            background: var(--azure-color);
+            color: white;
+        }
+        
+        .oss-badge {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .implementation-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .implementation-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .implementation-steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 16%;
+        }
+        
+        .step-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        
+        .step-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .data-flow-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .data-flow-container {
+            height: 400px;
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .flow-element {
+            position: absolute;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 180px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .flow-element:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        
+        .user-element {
+            background: var(--secondary-color);
+            top: 50px;
+            left: 50px;
+        }
+        
+        .cdn-element {
+            background: var(--app-color);
+            top: 50px;
+            left: 300px;
+        }
+        
+        .waf-element {
+            background: var(--security-color);
+            top: 50px;
+            left: 550px;
+        }
+        
+        .app-element {
+            background: var(--gcp-color);
+            top: 50px;
+            left: 800px;
+        }
+        
+        .api-element {
+            background: var(--aws-color);
+            top: 200px;
+            left: 300px;
+        }
+        
+        .db-element {
+            background: var(--data-color);
+            top: 200px;
+            left: 550px;
+        }
+        
+        .payment-element {
+            background: var(--compliance-color);
+            top: 200px;
+            left: 800px;
+        }
+        
+        .data-flow {
+            position: absolute;
+            height: 4px;
+            background: #3498db;
+            transform-origin: left center;
+            z-index: 1;
+        }
+        
+        .data-flow-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid #3498db;
+            z-index: 1;
+        }
+        
+        .floating-animation {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        .floating-animation:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-animation:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .implementation-steps {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .implementation-steps::before {
+                display: none;
+            }
+            
+            .step {
+                width: 100%;
+            }
+            
+            .data-flow-container {
+                height: 600px;
+            }
+            
+            .flow-element {
+                position: static;
+                margin: 10px auto;
+                width: 80%;
+            }
+        }
+        
+        .risk-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .risk-high { background: #e74c3c; }
+        .risk-medium { background: #f39c12; }
+        .risk-low { background: #2ecc71; }
+        
+        .threat-scenario {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="floating-animation"></div>
+            <div class="floating-animation"></div>
+            
+            <h1 class="header-title">
+                <i class="fas fa-shopping-cart"></i> Enterprise E-Commerce Security Architecture
+            </h1>
+            <p class="header-subtitle">Multi-Cloud Security Implementation with OWASP Standards, PCI DSS Compliance, and Real-time Threat Protection</p>
+            <div class="compliance-badges" style="display: flex; gap: 15px; margin-top: 20px;">
+                <span style="background: var(--compliance-color); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.9rem;">
+                    <i class="fas fa-shield-alt"></i> PCI DSS Level 1
+                </span>
+                <span style="background: var(--data-color); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.9rem;">
+                    <i class="fas fa-user-shield"></i> GDPR Compliant
+                </span>
+                <span style="background: var(--gcp-color); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.9rem;">
+                    <i class="fab fa-google"></i> GCP Security
+                </span>
+                <span style="background: var(--aws-color); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.9rem;">
+                    <i class="fab fa-aws"></i> AWS Security
+                </span>
+            </div>
+        </div>
+        
+        <div class="architecture-overview">
+            <div class="main-architecture">
+                <h2 class="architecture-title">
+                    <i class="fas fa-project-diagram"></i> Multi-Layer Security Architecture
+                </h2>
+                <div class="architecture-container">
+                    <!-- Security Layer -->
+                    <div class="cloud-layer security-layer">
+                        <div class="layer-title">
+                            <i class="fas fa-shield-alt"></i> Security & Compliance Layer
+                        </div>
+                        <div class="components-grid">
+                            <div class="component" onclick="showDetails('WAF', 'security')">
+                                <div class="component-icon"><i class="fas fa-fire"></i></div>
+                                <div>Cloud WAF</div>
+                            </div>
+                            <div class="component" onclick="showDetails('DDoS', 'security')">
+                                <div class="component-icon"><i class="fas fa-network-wired"></i></div>
+                                <div>DDoS Protection</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Bot', 'security')">
+                                <div class="component-icon"><i class="fas fa-robot"></i></div>
+                                <div>Bot Management</div>
+                            </div>
+                            <div class="component" onclick="showDetails('SIEM', 'security')">
+                                <div class="component-icon"><i class="fas fa-chart-line"></i></div>
+                                <div>SIEM & Monitoring</div>
+                            </div>
+                            <div class="component" onclick="showDetails('CSPM', 'security')">
+                                <div class="component-icon"><i class="fas fa-cloud"></i></div>
+                                <div>CSPM</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Application Layer -->
+                    <div class="cloud-layer application-layer">
+                        <div class="layer-title">
+                            <i class="fas fa-shopping-cart"></i> Application Layer
+                        </div>
+                        <div class="components-grid">
+                            <div class="component" onclick="showDetails('Frontend', 'application')">
+                                <div class="component-icon"><i class="fas fa-desktop"></i></div>
+                                <div>React Frontend</div>
+                            </div>
+                            <div class="component" onclick="showDetails('API', 'application')">
+                                <div class="component-icon"><i class="fas fa-code"></i></div>
+                                <div>Microservices API</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Auth', 'application')">
+                                <div class="component-icon"><i class="fas fa-user-lock"></i></div>
+                                <div>Auth Service</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Payment', 'application')">
+                                <div class="component-icon"><i class="fas fa-credit-card"></i></div>
+                                <div>Payment Gateway</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Search', 'application')">
+                                <div class="component-icon"><i class="fas fa-search"></i></div>
+                                <div>Search Service</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Layer -->
+                    <div class="cloud-layer data-layer">
+                        <div class="layer-title">
+                            <i class="fas fa-database"></i> Data Layer
+                        </div>
+                        <div class="components-grid">
+                            <div class="component" onclick="showDetails('CustomerDB', 'data')">
+                                <div class="component-icon"><i class="fas fa-users"></i></div>
+                                <div>Customer Database</div>
+                            </div>
+                            <div class="component" onclick="showDetails('PaymentDB', 'data')">
+                                <div class="component-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                <div>Payment Data</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Cache', 'data')">
+                                <div class="component-icon"><i class="fas fa-bolt"></i></div>
+                                <div>Redis Cache</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Warehouse', 'data')">
+                                <div class="component-icon"><i class="fas fa-warehouse"></i></div>
+                                <div>Data Warehouse</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Backup', 'data')">
+                                <div class="component-icon"><i class="fas fa-save"></i></div>
+                                <div>Backup & DR</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Infrastructure Layer -->
+                    <div class="cloud-layer infrastructure-layer">
+                        <div class="layer-title">
+                            <i class="fas fa-server"></i> Infrastructure Layer
+                        </div>
+                        <div class="components-grid">
+                            <div class="component" onclick="showDetails('K8s', 'infrastructure')">
+                                <div class="component-icon"><i class="fas fa-dharmachakra"></i></div>
+                                <div>Kubernetes</div>
+                            </div>
+                            <div class="component" onclick="showDetails('VPC', 'infrastructure')">
+                                <div class="component-icon"><i class="fas fa-project-diagram"></i></div>
+                                <div>VPC Network</div>
+                            </div>
+                            <div class="component" onclick="showDetails('CDN', 'infrastructure')">
+                                <div class="component-icon"><i class="fas fa-globe"></i></div>
+                                <div>Global CDN</div>
+                            </div>
+                            <div class="component" onclick="showDetails('LoadBalancer', 'infrastructure')">
+                                <div class="component-icon"><i class="fas fa-balance-scale"></i></div>
+                                <div>Load Balancer</div>
+                            </div>
+                            <div class="component" onclick="showDetails('Monitoring', 'infrastructure')">
+                                <div class="component-icon"><i class="fas fa-heartbeat"></i></div>
+                                <div>Monitoring</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="compliance-status">
+                <h2 class="architecture-title">
+                    <i class="fas fa-clipboard-check"></i> Compliance Status
+                </h2>
+                <div class="compliance-grid">
+                    <div class="compliance-card">
+                        <i class="fas fa-shield-alt fa-3x pci-compliant"></i>
+                        <div class="compliance-value pci-compliant">98%</div>
+                        <h3>PCI DSS Compliance</h3>
+                        <p>Payment Card Industry Standards</p>
+                    </div>
+                    <div class="compliance-card">
+                        <i class="fas fa-user-shield fa-3x gdpr-compliant"></i>
+                        <div class="compliance-value gdpr-compliant">95%</div>
+                        <h3>GDPR Compliance</h3>
+                        <p>Data Protection Regulations</p>
+                    </div>
+                    <div class="compliance-card">
+                        <i class="fas fa-bug fa-3x" style="color: var(--security-color);"></i>
+                        <div class="compliance-value" style="color: var(--security-color);">87%</div>
+                        <h3>OWASP Coverage</h3>
+                        <p>Top 10 Security Risks</p>
+                    </div>
+                    <div class="compliance-card">
+                        <i class="fas fa-clock fa-3x" style="color: var(--app-color);"></i>
+                        <div class="compliance-value" style="color: var(--app-color);">30min</div>
+                        <h3>Mean Time to Detect</h3>
+                        <p>Security Incidents</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: #e8f5e8; border-radius: 10px;">
+                    <h4 style="color: var(--compliance-color); margin-bottom: 10px;">
+                        <i class="fas fa-check-circle"></i> Security Posture Summary
+                    </h4>
+                    <ul style="list-style: none;">
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: var(--compliance-color);"></i> 24/7 Security Monitoring Enabled</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: var(--compliance-color);"></i> Automated Vulnerability Scanning</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: var(--compliance-color);"></i> Real-time Threat Detection</li>
+                        <li style="padding: 5px 0;"><i class="fas fa-check" style="color: var(--compliance-color);"></i> Encryption at Rest & Transit</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="owasp-section">
+            <h2 class="architecture-title">
+                <i class="fas fa-bug"></i> OWASP Top 10 Implementation & Mitigation
+            </h2>
+            
+            <div class="owasp-matrix">
+                <div class="owasp-risk">
+                    <div class="risk-header">
+                        <span class="risk-id">A01:2021</span>
+                        <span class="risk-indicator risk-high"></span>
+                    </div>
+                    <h3 class="risk-title">Broken Access Control</h3>
+                    <p>Restrictions on what authenticated users are allowed to do are not properly enforced.</p>
+                    <div class="threat-scenario">
+                        <strong>Threat Scenario:</strong> Attacker manipulates URL parameters to access other users' order history
+                    </div>
+                    <div class="risk-mitigation">
+                        <strong>Mitigation:</strong> Implement proper RBAC, JWT validation, API gateway authorization
+                    </div>
+                </div>
+                
+                <div class="owasp-risk">
+                    <div class="risk-header">
+                        <span class="risk-id">A02:2021</span>
+                        <span class="risk-indicator risk-high"></span>
+                    </div>
+                    <h3 class="risk-title">Cryptographic Failures</h3>
+                    <p>Failure to protect sensitive data through encryption and proper key management.</p>
+                    <div class="threat-scenario">
+                        <strong>Threat Scenario:</strong> Credit card data stored in plaintext in database logs
+                    </div>
+                    <div class="risk-mitigation">
+                        <strong>Mitigation:</strong> AES-256 encryption, Cloud KMS, TLS 1.3, data tokenization
+                    </div>
+                </div>
+                
+                <div class="owasp-risk">
+                    <div class="risk-header">
+                        <span class="risk-id">A03:2021</span>
+                        <span class="risk-indicator risk-high"></span>
+                    </div>
+                    <h3 class="risk-title">Injection</h3>
+                    <p>Untrusted data is sent to an interpreter as part of a command or query.</p>
+                    <div class="threat-scenario">
+                        <strong>Threat Scenario:</strong> SQL injection through search functionality exposing customer data
+                    </div>
+                    <div class="risk-mitigation">
+                        <strong>Mitigation:</strong> Parameterized queries, ORM frameworks, input validation, WAF rules
+                    </div>
+                </div>
+                
+                <div class="owasp-risk">
+                    <div class="risk-header">
+                        <span class="risk-id">A06:2021</span>
+                        <span class="risk-indicator risk-medium"></span>
+                    </div>
+                    <h3 class="risk-title">Vulnerable Components</h3>
+                    <p>Using dependencies with known vulnerabilities.</p>
+                    <div class="threat-scenario">
+                        <strong>Threat Scenario:</strong> Log4j vulnerability in Java microservices allowing RCE
+                    </div>
+                    <div class="risk-mitigation">
+                        <strong>Mitigation:</strong> SCA tools, dependency scanning, automated patching, SBOM
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tools-section">
+            <h2 class="architecture-title">
+                <i class="fas fa-tools"></i> Security Tools & Services Mapping
+            </h2>
+            
+            <div class="tools-grid">
+                <div class="tool-category">
+                    <div class="category-header">
+                        <i class="fab fa-google"></i>
+                        <h3>GCP Security Services</h3>
+                    </div>
+                    <ul class="tool-list">
+                        <li class="tool-item">
+                            <span class="tool-badge gcp-badge">GCP</span>
+                            Cloud Armor (WAF & DDoS)
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge gcp-badge">GCP</span>
+                            Security Command Center
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge gcp-badge">GCP</span>
+                            Cloud IAP
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge gcp-badge">GCP</span>
+                            Cloud KMS
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="tool-category">
+                    <div class="category-header">
+                        <i class="fab fa-aws"></i>
+                        <h3>AWS Security Services</h3>
+                    </div>
+                    <ul class="tool-list">
+                        <li class="tool-item">
+                            <span class="tool-badge aws-badge">AWS</span>
+                            WAF & Shield
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge aws-badge">AWS</span>
+                            Security Hub
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge aws-badge">AWS</span>
+                            GuardDuty
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge aws-badge">AWS</span>
+                            KMS
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="tool-category">
+                    <div class="category-header">
+                        <i class="fas fa-code"></i>
+                        <h3>Application Security</h3>
+                    </div>
+                    <ul class="tool-list">
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">SAST</span>
+                            SonarQube
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">DAST</span>
+                            OWASP ZAP
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">SCA</span>
+                            Snyk
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">Secret</span>
+                            GitGuardian
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="tool-category">
+                    <div class="category-header">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>Infrastructure Security</h3>
+                    </div>
+                    <ul class="tool-list">
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">CSPM</span>
+                            Prisma Cloud
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">Container</span>
+                            Trivy
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">IaC</span>
+                            Checkov
+                        </li>
+                        <li class="tool-item">
+                            <span class="tool-badge oss-badge">SIEM</span>
+                            Splunk
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="implementation-section">
+            <h2 class="architecture-title">
+                <i class="fas fa-road"></i> Security Implementation Roadmap
+            </h2>
+            
+            <div class="implementation-steps">
+                <div class="step">
+                    <div class="step-circle">1</div>
+                    <div class="step-title">Assessment</div>
+                    <div class="step-description">Threat modeling & risk assessment</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <div class="step-title">Design</div>
+                    <div class="step-description">Security architecture planning</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-title">Implement</div>
+                    <div class="step-description">Security controls deployment</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-title">Test</div>
+                    <div class="step-description">Penetration testing & validation</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">5</div>
+                    <div class="step-title">Monitor</div>
+                    <div class="step-description">Continuous security monitoring</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">6</div>
+                    <div class="step-title">Optimize</div>
+                    <div class="step-description">Security improvements & updates</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="data-flow-section">
+            <h2 class="architecture-title">
+                <i class="fas fa-exchange-alt"></i> Secure Data Flow Architecture
+            </h2>
+            
+            <div class="data-flow-container" id="dataFlowDiagram">
+                <div class="flow-element user-element">
+                    <i class="fas fa-user fa-2x"></i><br>
+                    End User
+                </div>
+                
+                <div class="flow-element cdn-element">
+                    <i class="fas fa-globe fa-2x"></i><br>
+                    Cloudflare CDN
+                </div>
+                
+                <div class="flow-element waf-element">
+                    <i class="fas fa-fire fa-2x"></i><br>
+                    Cloud Armor WAF
+                </div>
+                
+                <div class="flow-element app-element">
+                    <i class="fab fa-google fa-2x"></i><br>
+                    GKE Application
+                </div>
+                
+                <div class="flow-element api-element">
+                    <i class="fas fa-code fa-2x"></i><br>
+                    API Gateway
+                </div>
+                
+                <div class="flow-element db-element">
+                    <i class="fas fa-database fa-2x"></i><br>
+                    Cloud SQL
+                </div>
+                
+                <div class="flow-element payment-element">
+                    <i class="fas fa-credit-card fa-2x"></i><br>
+                    Payment Processor
+                </div>
+                
+                <!-- Data Flow Lines -->
+                <div class="data-flow" style="top: 85px; left: 230px; width: 0; transform: rotate(0deg);" id="flow1"></div>
+                <div class="data-flow-arrow" style="top: 83px; left: 420px;" id="arrow1"></div>
+                
+                <div class="data-flow" style="top: 85px; left: 480px; width: 0; transform: rotate(0deg);" id="flow2"></div>
+                <div class="data-flow-arrow" style="top: 83px; left: 670px;" id="arrow2"></div>
+                
+                <div class="data-flow" style="top: 85px; left: 730px; width: 0; transform: rotate(0deg);" id="flow3"></div>
+                <div class="data-flow-arrow" style="top: 83px; left: 920px;" id="arrow3"></div>
+                
+                <div class="data-flow" style="top: 235px; left: 380px; width: 0; transform: rotate(90deg);" id="flow4"></div>
+                <div class="data-flow-arrow" style="top: 333px; left: 378px; transform: rotate(90deg);" id="arrow4"></div>
+                
+                <div class="data-flow" style="top: 235px; left: 630px; width: 0; transform: rotate(90deg);" id="flow5"></div>
+                <div class="data-flow-arrow" style="top: 333px; left: 628px; transform: rotate(90deg);" id="arrow5"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Component details modal function
+        function showDetails(component, layer) {
+            const details = {
+                'WAF': {
+                    title: 'Cloud Web Application Firewall',
+                    description: 'Google Cloud Armor with custom WAF rules protecting against OWASP Top 10 threats',
+                    features: ['DDoS Protection', 'SQL Injection Prevention', 'XSS Protection', 'Rate Limiting'],
+                    tools: ['Cloud Armor', 'Custom WAF Rules', 'Threat Intelligence']
+                },
+                'DDoS': {
+                    title: 'Distributed Denial of Service Protection',
+                    description: 'Multi-layered DDoS mitigation with global anycast network',
+                    features: ['L3/L4 Protection', 'L7 Protection', 'Adaptive Protection', 'Geo-blocking'],
+                    tools: ['Cloud Armor', 'Cloud CDN', 'Global Load Balancer']
+                },
+                'Frontend': {
+                    title: 'React Frontend Application',
+                    description: 'Secure SPA with CSP headers, XSS protection, and secure authentication',
+                    features: ['Content Security Policy', 'XSS Protection', 'JWT Authentication', 'HTTPS Enforcement'],
+                    tools: ['React Security', 'CSP Headers', 'OWASP ZAP', 'Snyk']
+                }
+            };
+            
+            const detail = details[component] || {
+                title: component,
+                description: 'Security implementation details for ' + component,
+                features: ['Security Feature 1', 'Security Feature 2'],
+                tools: ['Security Tool 1', 'Security Tool 2']
+            };
+            
+            alert(`${detail.title}\n\n${detail.description}\n\nFeatures: ${detail.features.join(', ')}\n\nTools: ${detail.tools.join(', ')}`);
+        }
+        
+        // Animate data flow diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate data flow lines
+            setTimeout(() => {
+                document.getElementById('flow1').style.width = '170px';
+                document.getElementById('flow2').style.width = '170px';
+                document.getElementById('flow3').style.width = '170px';
+                document.getElementById('flow4').style.width = '100px';
+                document.getElementById('flow5').style.width = '100px';
+            }, 500);
+            
+            // Add click handlers to flow elements
+            document.querySelectorAll('.flow-element').forEach(element => {
+                element.addEventListener('click', function() {
+                    const elementName = this.textContent.trim();
+                    alert(`Security Controls for: ${elementName}\n\nThis component implements multiple security controls including encryption, access controls, and monitoring.`);
+                });
+            });
+            
+            // Add animation to compliance cards
+            const observerOptions = {
+                threshold: 0.5,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'pulse 0.6s ease-in-out';
+                        setTimeout(() => {
+                            entry.target.style.animation = '';
+                        }, 600);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.compliance-card, .owasp-risk, .tool-category').forEach(card => {
+                observer.observe(card);
+            });
+        });
+        
+        // Add CSS for pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

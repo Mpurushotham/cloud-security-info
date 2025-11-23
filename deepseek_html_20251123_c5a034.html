@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Security Architecture Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --gcp-color: #4285F4;
+            --aws-color: #FF9900;
+            --azure-color: #0078D4;
+            --security-color: #e74c3c;
+            --compliance-color: #2ecc71;
+            --data-color: #9b59b6;
+            --app-color: #f39c12;
+            --owasp-color: #e74c3c;
+            --devsecops-color: #9b59b6;
+            --secure-coding-color: #2ecc71;
+            --tools-color: #f39c12;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Styles */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .main-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+        
+        .main-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .main-subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 20px 30px;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--text-main);
+            min-width: 200px;
+        }
+        
+        .nav-tab.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Module Cards */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 2rem;
+        }
+        
+        .module-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: var(--secondary-color);
+        }
+        
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        .module-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .module-description {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .module-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .module-features li {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .module-features li:before {
+            content: '✓';
+            color: var(--compliance-color);
+            font-weight: bold;
+        }
+        
+        .module-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .module-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        /* Embedded Content */
+        .embedded-content {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 0;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .embedded-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .embedded-title {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .embedded-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .embedded-body {
+            height: 80vh;
+            overflow: auto;
+        }
+        
+        .embedded-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Floating Animations */
+        .floating-animation {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        .floating-animation:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-animation:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .floating-animation:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .modules-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .main-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: 100%;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Badges */
+        .compliance-badges {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .badge {
+            background: var(--compliance-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .gcp-badge { background: var(--gcp-color); }
+        .aws-badge { background: var(--aws-color); }
+        .azure-badge { background: var(--azure-color); }
+        .security-badge { background: var(--security-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <div class="floating-animation"></div>
+            <div class="floating-animation"></div>
+            <div class="floating-animation"></div>
+            
+            <h1 class="main-title">
+                <i class="fas fa-cloud-shield-alt"></i> Cloud Security Architecture Hub
+            </h1>
+            <p class="main-subtitle">Comprehensive Multi-Cloud Security Implementation Guides, Architecture Patterns, and DevSecOps Practices</p>
+            
+            <div class="compliance-badges">
+                <span class="badge gcp-badge">
+                    <i class="fab fa-google"></i> GCP Security
+                </span>
+                <span class="badge aws-badge">
+                    <i class="fab fa-aws"></i> AWS Security
+                </span>
+                <span class="badge azure-badge">
+                    <i class="fab fa-microsoft"></i> Azure Security
+                </span>
+                <span class="badge security-badge">
+                    <i class="fas fa-shield-alt"></i> OWASP Standards
+                </span>
+                <span class="badge">
+                    <i class="fas fa-user-shield"></i> PCI DSS Compliant
+                </span>
+            </div>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="overview">
+                <i class="fas fa-home"></i> Overview
+            </button>
+            <button class="nav-tab" data-tab="tutorial">
+                <i class="fas fa-graduation-cap"></i> Cloud Security Tutorial
+            </button>
+            <button class="nav-tab" data-tab="ecommerce">
+                <i class="fas fa-shopping-cart"></i> E-Commerce Security
+            </button>
+            <button class="nav-tab" data-tab="devsecops">
+                <i class="fas fa-code-branch"></i> AppSec & DevSecOps
+            </button>
+            <button class="nav-tab" data-tab="financial">
+                <i class="fas fa-university"></i> Financial Services
+            </button>
+            <button class="nav-tab" data-tab="defense">
+                <i class="fas fa-shield-alt"></i> Defense-in-Depth
+            </button>
+        </div>
+        
+        <!-- Overview Section -->
+        <div class="content-section active" id="overview-section">
+            <h2 style="margin-bottom: 1.5rem; color: white; text-align: center;">Cloud Security Architecture Modules</h2>
+            
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="module-title">Cloud Security Tutorial</h3>
+                    <p class="module-description">Interactive guide to GCP, AWS, and Azure security services with architecture diagrams and real-world use cases.</p>
+                    <ul class="module-features">
+                        <li>Multi-cloud service comparisons</li>
+                        <li>Interactive architecture diagrams</li>
+                        <li>Real-world implementation examples</li>
+                        <li>Cross-platform service mapping</li>
+                    </ul>
+                    <button class="module-btn" data-tab="tutorial">
+                        Explore Tutorial <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 class="module-title">E-Commerce Security Architecture</h3>
+                    <p class="module-description">Multi-layer security implementation for enterprise e-commerce platforms with PCI DSS compliance.</p>
+                    <ul class="module-features">
+                        <li>Multi-layer security architecture</li>
+                        <li>PCI DSS compliance monitoring</li>
+                        <li>OWASP Top 10 implementation</li>
+                        <li>Security tools mapping</li>
+                    </ul>
+                    <button class="module-btn" data-tab="ecommerce">
+                        View Architecture <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="module-title">Application Security & DevSecOps</h3>
+                    <p class="module-description">OWASP standards, secure coding practices, and DevSecOps pipeline with security tool integration.</p>
+                    <ul class="module-features">
+                        <li>OWASP Top 10 risks & mitigation</li>
+                        <li>DevSecOps pipeline stages</li>
+                        <li>Secure coding principles</li>
+                        <li>Security tools matrix</li>
+                    </ul>
+                    <button class="module-btn" data-tab="devsecops">
+                        Learn AppSec <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="module-title">Financial Services Security</h3>
+                    <p class="module-description">Multi-cloud security architecture for PCI DSS compliance in banking and financial applications.</p>
+                    <ul class="module-features">
+                        <li>Financial services use case</li>
+                        <li>PCI DSS compliance architecture</li>
+                        <li>Multi-cloud security controls</li>
+                        <li>Implementation roadmap</li>
+                    </ul>
+                    <button class="module-btn" data-tab="financial">
+                        Explore Use Case <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="module-title">Defense-in-Depth Strategy</h3>
+                    <p class="module-description">Structured, multi-cloud guide to implementing layered security controls for modern applications.</p>
+                    <ul class="module-features">
+                        <li>Layered security approach</li>
+                        <li>Multi-cloud implementation</li>
+                        <li>Zero Trust architecture</li>
+                        <li>Service mapping cheat sheet</li>
+                    </ul>
+                    <button class="module-btn" data-tab="defense">
+                        View Strategy <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="module-title">Quick Start Guide</h3>
+                    <p class="module-description">Get started with cloud security implementation using our structured approach and best practices.</p>
+                    <ul class="module-features">
+                        <li>Security assessment checklist</li>
+                        <li>Implementation priorities</li>
+                        <li>Compliance frameworks</li>
+                        <li>Monitoring & optimization</li>
+                    </ul>
+                    <a href="#quick-start" class="module-btn">
+                        Get Started <i class="fas fa-play"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div id="quick-start" style="margin-top: 3rem; padding: 2rem; background: var(--bg-card); border-radius: 15px;">
+                <h2 style="margin-bottom: 1.5rem; color: white;">Cloud Security Quick Start</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div style="padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 10px;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">1. Assessment</h3>
+                        <p>Evaluate your current cloud environment, identify assets, and assess security posture.</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 10px;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">2. Planning</h3>
+                        <p>Define security requirements, compliance needs, and architecture based on business goals.</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 10px;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">3. Implementation</h3>
+                        <p>Deploy security controls, configure services, and establish monitoring across cloud environments.</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 10px;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">4. Validation</h3>
+                        <p>Test security controls, validate compliance, and conduct penetration testing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Embedded Content Sections -->
+        <div class="content-section" id="tutorial-section">
+            <div class="embedded-content">
+                <div class="embedded-header">
+                    <h3 class="embedded-title">
+                        <i class="fas fa-graduation-cap"></i> Cloud Security Tutorial: GCP, AWS, Azure
+                    </h3>
+                    <button class="embedded-close" data-close="tutorial">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="embedded-body">
+                    <!-- Cloud Security Tutorial Content -->
+                    <iframe src="deepseek_html_20251123_db495b.html" title="Cloud Security Tutorial"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="ecommerce-section">
+            <div class="embedded-content">
+                <div class="embedded-header">
+                    <h3 class="embedded-title">
+                        <i class="fas fa-shopping-cart"></i> Enterprise E-Commerce Security Architecture
+                    </h3>
+                    <button class="embedded-close" data-close="ecommerce">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="embedded-body">
+                    <!-- E-Commerce Security Content -->
+                    <iframe src="deepseek_html_20251123_67a6fe.html" title="E-Commerce Security Architecture"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="devsecops-section">
+            <div class="embedded-content">
+                <div class="embedded-header">
+                    <h3 class="embedded-title">
+                        <i class="fas fa-code-branch"></i> Application Security & DevSecOps
+                    </h3>
+                    <button class="embedded-close" data-close="devsecops">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="embedded-body">
+                    <!-- DevSecOps Content -->
+                    <iframe src="deepseek_html_20251123_a3a083.html" title="Application Security & DevSecOps"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="financial-section">
+            <div class="embedded-content">
+                <div class="embedded-header">
+                    <h3 class="embedded-title">
+                        <i class="fas fa-university"></i> Financial Services Cloud Security
+                    </h3>
+                    <button class="embedded-close" data-close="financial">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="embedded-body">
+                    <!-- Financial Services Content -->
+                    <iframe src="deepseek_html_20251123_b05ab0.html" title="Financial Services Security"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="defense-section">
+            <div class="embedded-content">
+                <div class="embedded-header">
+                    <h3 class="embedded-title">
+                        <i class="fas fa-shield-alt"></i> Defense-in-Depth Implementation Guide
+                    </h3>
+                    <button class="embedded-close" data-close="defense">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="embedded-body">
+                    <!-- Defense-in-Depth Content -->
+                    <iframe src="defenseindepth.html" title="Defense-in-Depth Strategy"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-footer">
+            <p>Cloud Security Architecture Hub &copy; 2023 | Comprehensive Multi-Cloud Security Implementation Guides</p>
+            <p><small>All content is for educational purposes and represents security best practices for cloud environments.</small></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid for diagrams
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+        });
+        
+        // Tab navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const contentSections = document.querySelectorAll('.content-section');
+            const moduleBtns = document.querySelectorAll('.module-btn');
+            const closeBtns = document.querySelectorAll('.embedded-close');
+            
+            // Switch tabs
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show corresponding section
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    document.getElementById(`${tabId}-section`).classList.add('active');
+                });
+            });
+            
+            // Module buttons to switch tabs
+            moduleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelector(`.nav-tab[data-tab="${tabId}"]`).classList.add('active');
+                    
+                    // Show corresponding section
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    document.getElementById(`${tabId}-section`).classList.add('active');
+                });
+            });
+            
+            // Close embedded content
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-close');
+                    
+                    // Switch back to overview
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelector('.nav-tab[data-tab="overview"]').classList.add('active');
+                    
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    document.getElementById('overview-section').classList.add('active');
+                });
+            });
+            
+            // Add animation to module cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.style.opacity = '0';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
